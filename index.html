@@ -1,200 +1,185 @@
-<!DOCTYPE html>
+# Integrate the three uploaded images (without the landing page) into the static site package.
+import os, zipfile, textwrap, datetime, shutil
+
+# Prepare workspace
+OUT_DIR = "/mnt/data/sheryl_couture_final_site"
+if os.path.exists(OUT_DIR):
+    shutil.rmtree(OUT_DIR)
+os.makedirs(OUT_DIR, exist_ok=True)
+img_dir = os.path.join(OUT_DIR, "images")
+os.makedirs(img_dir, exist_ok=True)
+
+# Move uploaded images
+uploads = {
+    "Client photos.png": "/mnt/data/Client photos.png",
+    "Dresses.png": "/mnt/data/Dresses.png",
+    "soft furnishings.png": "/mnt/data/soft furnishings.png",
+}
+for name, path in uploads.items():
+    shutil.copy(path, os.path.join(img_dir, name))
+
+# Build HTML
+html = textwrap.dedent(f"""\
+<!doctype html>
 <html lang="en">
 <head>
- <meta charset="UTF-8" />
- <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
- <meta name="description" content="Hand-crafted bespoke Roman blinds and soft furnishings made in Chester by an experienced seamstress.">
- <meta name="keywords" content="Roman blinds, bespoke curtains, Chester, handmade blinds, soft furnishings, custom blinds, window treatments">
- <title>Sheryl Couture</title>
-
- <link rel="icon" type="image/png" href="/sc_favicon/favicon-96x96.png" sizes="96x96" />
- <link rel="icon" type="image/svg+xml" href="/sc_favicon/favicon.svg" />
- <link rel="shortcut icon" href="/sc_favicon/favicon.ico" />
- <link rel="apple-touch-icon" sizes="180x180" href="/sc_favicon/apple-touch-icon.png" />
- <link rel="manifest" href="/sc_favicon/site.webmanifest" />
-
- <!-- Google Fonts -->
- <link rel="preconnect" href="https://fonts.googleapis.com">
- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
- <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-
- <style>
-   html {
-     scroll-behavior: smooth;
-   }
-
-   body {
-     margin: 0;
-     font-family: 'Montserrat', sans-serif;
-     background-color: #9f9f9f47;
-     color: #333;
-   }
-
-   header {
-     background-color: #767272;
-     color: white;
-     padding: 3rem 2rem;
-     text-align: center;
-     position: relative;
-     overflow: hidden;
-   }
-
-   header::before {
-     content: "";
-     position: absolute;
-     top: 0;
-     left: 0;
-     width: 100%;
-     height: 100%;
-     background-image: url('https://i.postimg.cc/Z9LnTCPt/58-BE838-C-C1-C3-495-C-95-B1-69-B566-C8-C918-4-5005-c.jpg');
-     background-repeat: no-repeat;
-     background-position: center;
-     background-size: contain;
-     opacity: 0.2;
-     z-index: 0;
-   }
-
-   header h1,
-   .subhead {
-     position: relative;
-     z-index: 1;
-   }
-
-   header h1 {
-     font-weight: 700;
-     margin: 0;
-     font-size: 2.5rem;
-   }
-
-   .subhead {
-     font-family: 'Roboto', sans-serif;
-     font-weight: 300;
-     font-size: 1.2rem;
-     margin-top: 1rem;
-   }
-
-   nav {
-     background-color: #eee;
-     padding: 0.5rem 2rem;
-     display: flex;
-     flex-wrap: wrap;
-     gap: 1rem;
-   }
-
-   nav a {
-     text-decoration: none;
-     color: #827979;
-     font-weight: bold;
-   }
-
-   .section {
-     padding: 2rem;
-   }
-
-   h2 {
-     font-family: 'Roboto', sans-serif;
-     font-weight: 500;
-     margin-bottom: 1.5rem;
-   }
-
-   .image-row {
-     display: flex;
-     flex-direction: column;
-     align-items: center;
-     gap: 2rem;
-     margin: 2rem 0;
-   }
-
-   .image-row img {
-     width: 500px;
-     max-width: 100%;
-     border-radius: 8px;
-     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-   }
-
-   footer {
-     text-align: center;
-     padding: 1rem;
-     background-color: #444;
-     color: white;
-     margin-top: 2rem;
-   }
-
-   @media (max-width: 768px) {
-     nav {
-       flex-direction: column;
-     }
-
-     header h1 {
-       font-size: 2rem;
-     }
-
-     .subhead {
-       font-size: 1rem;
-     }
-   }
- </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sheryl Couture Design Studio</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <h1>SHERYL<br/>COUTURE<br/>DESIGN<br/>STUDIO</h1>
+      </div>
+      <nav class="nav">
+        <a href="#about">About me</a>
+        <a href="#work">My work</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
 
- <header>
-   <h1>Sheryl Couture</h1>
-   <p class="subhead">Bespoke Blinds, Curtains and Dresses all designed and hand-crafted in Chester, UK</p>
- </header>
+  <main>
+    <section class="hero">
+      <div class="hero-inner container">
+        <div class="hero-left">
+          <h2>FREE MEASURING AND<br/>DESIGN CONSULTATION</h2>
+          <p class="tagline">Elevate your everyday</p>
+          <p class="lead">Hand crafted Roman blinds, curtains, lampshades and dresses in Chester, UK.</p>
+          <ul class="bullets">
+            <li>Locally made</li>
+            <li>Ethically sourced materials</li>
+            <li>Eco-friendly</li>
+          </ul>
+          <a class="cta" href="#contact">Get in touch</a>
+        </div>
+      </div>
+    </section>
 
- <nav>
-   <a href="#soft-furnishings">Soft Furnishings</a>
-   <a href="#dressmaking">Dressmaking</a>
-   <a href="#about">About</a>
-   <a href="#contact">Contact</a>
-   <a href="https://www.facebook.com/share/1Bbtc9KEa1/" target="_blank">Facebook</a>
- </nav>
+    <section id="work" class="container work">
+      <h3>My work</h3>
+      <p class="intro">Many designs are made using up-cycled materials such as lampshade frames, retired curtains, and bedding.</p>
+      <div class="grid">
+        <figure>
+          <img src="images/soft furnishings.png" alt="Soft furnishings" />
+          <figcaption>Soft furnishings</figcaption>
+        </figure>
+        <figure>
+          <img src="images/Dresses.png" alt="Dresses" />
+          <figcaption>Dresses</figcaption>
+        </figure>
+        <figure>
+          <img src="images/Client photos.png" alt="Client photos" />
+          <figcaption>Client photos</figcaption>
+        </figure>
+      </div>
+    </section>
 
- <section id="soft-furnishings" class="section">
-   <h2>Soft Furnishings</h2>
-   <div class="image-row">
-     <img loading="lazy" src="https://i.postimg.cc/jwd5CtvC/Roman-blind-down.png" alt="Roman-blind-down"/>
-     <img loading="lazy" src="https://i.postimg.cc/ZBKR04HM/IMG-2099.jpg" alt="IMG-2099"/>
-     <img src="https://i.postimg.cc/njczMpTJ/cushion.png" alt="cushion"/>
-     <img src="https://i.postimg.cc/TLDRK1gx/grey-blind.jpg" alt="grey-blind"/>
-     <img src="https://i.postimg.cc/R3Q7j7gq/57-BBC566-A4-AB-4-E81-B572-D037-E4-B17-E33-1-201-a.jpg" alt="Roman blind yellow down"/>
-     <img src="https://i.postimg.cc/yJXmwmLm/AED20591-047-F-4473-86-EB-4-D869-A5-BEA5-E.jpg" alt="Roman Blind 4"/>
-     <img src="https://i.postimg.cc/gwqVfVg3/D1-B3-D47-F-2-C51-4588-8-ABD-9-BD83-E210-E6-B.jpg" alt="Curtain"/>
-     <img src="https://i.postimg.cc/Q94MTwnF/Lampshade.jpg" alt="Lampshade"/>
-     <img src="https://i.postimg.cc/CnRxH7WJ/IMG-20250614-144005.jpg" alt="Chairs"/>
-   </div>
- </section>
+    <section id="about" class="container about">
+      <h3>About me</h3>
+      <p>My name is Sheryl. I am a seamstress with over a decade of experience, making bespoke bridal gowns, costumes, and soft furnishings since 2010. My dedication to high-end craftsmanship keeps me engaged with my customers, from the initial choice of fabric to measurements and final fittings.</p>
+      <p>Materials are sourced in the UK, with a special focus on working with English heritage designs.</p>
+    </section>
 
- <section id="dressmaking" class="section">
-   <h2>Dressmaking</h2>
-   <div class="image-row">
-     <a href="https://postimg.cc/1nM3hXxz" target="_blank"><img src="https://i.postimg.cc/1nM3hXxz/DSC-5481.jpg" alt="Bridal Gown"/></a><br/><br/>
-     <a href="https://postimg.cc/JHn418MM" target="_blank"><img src="https://i.postimg.cc/JHn418MM/DSC-5523.jpg" alt="Bridal Gown"/></a><br/><br/>
-     <a href="https://postimg.cc/V5LN9qMb" target="_blank"><img src="https://i.postimg.cc/V5LN9qMb/DSC-5716.jpg" alt="Lace Dress"/></a><br/><br/>
-     <a href="https://postimg.cc/K4vY7PLk" target="_blank"><img src="https://i.postimg.cc/K4vY7PLk/DSC-5733.jpg" alt="Lace Dress back"/></a><br/><br/>
-     <a href="https://postimg.cc/MfTKWwqW" target="_blank"><img src="https://i.postimg.cc/MfTKWwqW/DSC-6386.jpg" alt="Pink Dress"/></a><br/><br/>
-     <a href="https://postimg.cc/145z0Gwh" target="_blank"><img src="https://i.postimg.cc/145z0Gwh/DSC-6408.jpg" alt="Pink Dress back"/></a><br/><br/>
-   </div>
- </section>
+    <section id="contact" class="container contact">
+      <h3>Contact</h3>
+      <p>Message: <a href="tel:07947500710">07947 500710</a></p>
+      <p>Email: <a href="mailto:sherylguuk@gmail.com">sherylguuk@gmail.com</a></p>
+      <div class="social">
+        <a href="https://www.facebook.com/sherylcoutureblinds/" target="_blank">Facebook</a>
+        <a href="https://www.instagram.com/sheryl.couture/" target="_blank">Instagram</a>
+      </div>
+    </section>
+  </main>
 
- <section id="about" class="section">
-   <h2>About Me</h2>
-   <p>
-     I am a seamstress with over a decade of experience, making bespoke bridal gowns, costumes and soft furnishings since 2010. My dedication to high-end craftsmanship keeps me engaged with my customers, from the initial choice of fabric to measurements and final fittings.
-   </p>
-   <img src="https://i.postimg.cc/S2MynRCs/work-photo.jpg" alt="work-photo" style="width: 100%; max-width: 400px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); margin-top: 1rem;" />
- </section>
-
- <section id="contact" class="section">
-   <h2>Contact</h2>
-   <p>
-     For orders, inquiries or to schedule an online consultation, please reach out via email at <a href="mailto:sherylguuk@gmail.com">sherylguuk@gmail.com</a> or message me at 07947500710.
-   </p>
- </section>
-
- <footer>
-   &copy; 2025 Sheryl Couture. All rights reserved.
- </footer>
-
+  <footer class="site-footer">
+    <div class="container">
+      <small>© {datetime.date.today().year} Sheryl Couture Design Studio — Locally made, ethically sourced.</small>
+    </div>
+  </footer>
 </body>
 </html>
+""")
+with open(os.path.join(OUT_DIR, "index.html"), "w", encoding="utf-8") as f:
+    f.write(html)
+
+# CSS
+css = textwrap.dedent("""\
+:root{
+  --maxw:1100px;
+  --accent:#8b3e2f;
+  --muted:#555;
+  --gap:1.25rem;
+}
+
+*{box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial;line-height:1.6;color:#222;margin:0;background:#fff}
+.container{max-width:var(--maxw);margin:0 auto;padding:1rem}
+
+.site-header{border-bottom:1px solid #eee;background:#fff}
+.header-inner{display:flex;align-items:center;justify-content:space-between;padding:0.75rem 1rem}
+.brand h1{font-size:1.2rem;line-height:0.95;margin:0;color:var(--accent);font-weight:800;letter-spacing:1px}
+.nav a{margin-left:1rem;text-decoration:none;color:var(--muted);font-weight:600}
+.nav a:hover{color:#000}
+
+.hero{padding:3rem 0;background:linear-gradient(180deg,#fff 0%,#fdf7f5 100%)}
+.hero-left h2{font-size:1.3rem;margin:0;color:var(--accent);line-height:1.1}
+.tagline{font-size:1.1rem;color:var(--muted);margin:0.5rem 0}
+.lead{color:var(--muted);margin:0.5rem 0 1rem}
+.bullets{list-style:disc;margin:0.5rem 0 1rem 1.25rem;color:var(--muted)}
+.cta{display:inline-block;padding:0.6rem 1rem;background:var(--accent);color:white;border-radius:8px;text-decoration:none;font-weight:700}
+
+.work{padding:1.25rem 0;border-top:1px dashed #eee}
+.work h3{margin-top:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-top:0.75rem}
+.grid figure{margin:0;background:#fff;padding:0.5rem;border-radius:8px;text-align:center;border:1px solid #f4f2f1}
+.grid img{max-width:100%;height:auto;border-radius:6px;display:block;margin:0 auto}
+figcaption{font-size:0.95rem;color:var(--muted);padding-top:0.5rem}
+
+.about,.contact{padding:1.25rem 0;border-top:1px dashed #eee}
+.social a{margin-right:1rem;text-decoration:none;color:var(--accent);font-weight:600}
+.site-footer{border-top:1px solid #eee;padding:1rem 0;margin-top:2rem;text-align:center;color:var(--muted);font-size:0.9rem}
+
+@media (max-width:900px){
+  .nav{display:none}
+  .brand h1{font-size:1rem}
+}
+""")
+with open(os.path.join(OUT_DIR, "styles.css"), "w", encoding="utf-8") as f:
+    f.write(css)
+
+# README
+readme = """\
+Sheryl Couture - Final Static Website
+------------------------------------
+Includes uploaded images (without Landing page).
+
+Files:
+- index.html
+- styles.css
+- images/ (Client photos, Dresses, Soft furnishings)
+
+To preview:
+1. Download and unzip.
+2. Open index.html in your browser.
+
+Edit text/images freely to customize further.
+"""
+with open(os.path.join(OUT_DIR, "README.txt"), "w", encoding="utf-8") as f:
+    f.write(readme)
+
+# Zip the site
+zip_path = "/mnt/data/sheryl_couture_final_site_package.zip"
+with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED) as z:
+    for root, dirs, files in os.walk(OUT_DIR):
+        for fn in files:
+            full = os.path.join(root, fn)
+            arc = os.path.relpath(full, OUT_DIR)
+            z.write(full, arc)
+
+zip_path
+
+
